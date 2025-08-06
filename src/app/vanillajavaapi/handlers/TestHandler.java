@@ -1,6 +1,7 @@
 package app.vanillajavaapi.handlers;
 
 import app.vanillajavaapi.utils.JsonBuilder;
+import app.vanillajavaapi.utils.UrlHelper;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
@@ -39,12 +40,15 @@ public class TestHandler implements HttpHandler {
 
     private void handleGet(HttpExchange exchange) throws IOException {
 
+        String result = UrlHelper.extrairParametro(exchange, 1);
+
         sendResponse(
                 exchange,
                 200,
-                JsonBuilder.criarJson("message", "GET: Listando dados"),
+                JsonBuilder.criarJson("message", "GET: Listando dados: " + result),
                 "application/json"
         );
+
     }
 
     private void handlePost(HttpExchange exchange) throws IOException {
