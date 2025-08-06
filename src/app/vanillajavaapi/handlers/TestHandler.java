@@ -1,5 +1,6 @@
 package app.vanillajavaapi.handlers;
 
+import app.vanillajavaapi.utils.JsonBuilder;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
@@ -27,29 +28,58 @@ public class TestHandler implements HttpHandler {
                 handleDelete(exchange);
                 break;
             default:
-                sendResponse(exchange, 405, "Método não permitido!");
+                sendResponse(
+                        exchange,
+                        405,
+                        JsonBuilder.criarJson("message", "Método não permitido!"),
+                        "application/json"
+                );
         }
     }
 
     private void handleGet(HttpExchange exchange) throws IOException {
-        sendResponse(exchange, 200, "GET: Listando dados");
+
+        sendResponse(
+                exchange,
+                200,
+                JsonBuilder.criarJson("message", "GET: Listando dados"),
+                "application/json"
+        );
     }
 
     private void handlePost(HttpExchange exchange) throws IOException {
-        sendResponse(exchange, 201, "POST: Adicionando dados");
+
+        sendResponse(
+                exchange,
+                201,
+                JsonBuilder.criarJson("message", "POST: Adicionando dados"),
+                "application/json"
+        );
     }
 
     private void handlePut(HttpExchange exchange) throws IOException {
-        sendResponse(exchange, 200, "PUT: Atualizando dados");
+
+        sendResponse(
+                exchange,
+                200,
+                JsonBuilder.criarJson("message", "PUT: Atualizando dados"),
+                "application/json"
+        );
     }
 
     private void handleDelete(HttpExchange exchange) throws IOException {
-        sendResponse(exchange, 200, "DELETE: Deletando dados");
+
+        sendResponse(
+                exchange,
+                200,
+                JsonBuilder.criarJson("message", "DELETE: Deletando dados"),
+                "application/json"
+        );
     }
 
-    private void sendResponse(HttpExchange exchange, int statusCode, String message) throws IOException {
+    private void sendResponse(HttpExchange exchange, int statusCode, String message, String format) throws IOException {
         byte[] bytes = message.getBytes("UTF-8");
-        exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=UTF-8");
+        exchange.getResponseHeaders().set("Content-Type", format + "; charset=UTF-8");
         exchange.sendResponseHeaders(statusCode, bytes.length);
 
         try(OutputStream os = exchange.getResponseBody()) {
