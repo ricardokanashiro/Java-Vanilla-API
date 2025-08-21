@@ -47,6 +47,9 @@ public class AdmHandler implements HttpHandler {
     }
 
     private void handleGet(HttpExchange exchange) throws IOException {
+
+        List<String> params = UrlHelper.extrairParametro(exchange);
+
         List<AdmResponseDTO> adms = admService.findAll();
         sendResponse(200, gson.toJson(adms), exchange, "application/json");
     }
@@ -66,7 +69,7 @@ public class AdmHandler implements HttpHandler {
     }
 
     private void handlePut(HttpExchange exchange) throws IOException {
-        sendResponse(200, "Post", exchange, "application/json");
+        sendResponse(200, "PUT", exchange, "application/json");
     }
 
     private void handleDelete(HttpExchange exchange) throws IOException {
