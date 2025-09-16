@@ -9,4 +9,5 @@ public interface IAdmRepository {
     Adm findById(int id);
     void register(String name, String email, String password);
     void update(int id, String name, String password, String email);
+    void delete(int id);
 }

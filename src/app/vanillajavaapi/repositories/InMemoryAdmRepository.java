@@ -32,4 +32,8 @@ public class InMemoryAdmRepository implements IAdmRepository {
         foundAdm.setEmail(email);
         foundAdm.setPassword(password);
     }
+
+    public void delete(int id) {
+        adms.remove(id);
+    }
 }

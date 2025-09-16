@@ -91,7 +91,18 @@ public class AdmHandler implements HttpHandler {
     }
 
     private void handleDelete(HttpExchange exchange) throws IOException {
-        sendResponse(200, "Post", exchange, "application/json");
+
+        List<String> parametros = UrlHelper.extrairParametro(exchange);
+
+        if(parametros.isEmpty()) {
+            sendResponse(400, "Erro ao atualizar adm: id is missing!", exchange, "application/json");
+            return;
+        }
+
+        int providedId = Integer.parseInt(parametros.getFirst());
+        List<AdmResponseDTO> adms = this.admService.delete(providedId);
+
+        sendResponse(200, gson.toJson(adms), exchange, "application/json");
     }
 
     private void sendResponse(int statusCode, String message, HttpExchange exchange, String format) throws IOException {

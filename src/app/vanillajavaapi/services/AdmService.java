@@ -44,4 +44,9 @@ public class AdmService {
         this.admRepository.update(id, name, email, password);
         return this.findAll();
     }
+
+    public List<AdmResponseDTO> delete(int id) {
+        this.admRepository.delete(id);
+        return this.findAll();
+    }
 }
