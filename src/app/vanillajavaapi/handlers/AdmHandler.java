@@ -69,7 +69,25 @@ public class AdmHandler implements HttpHandler {
     }
 
     private void handlePut(HttpExchange exchange) throws IOException {
-        sendResponse(200, "PUT", exchange, "application/json");
+
+        List<String> parametros = UrlHelper.extrairParametro(exchange);
+
+        if(parametros.isEmpty()) {
+            sendResponse(400, "Erro ao atualizar adm: id is missing!", exchange, "application/json");
+            return;
+        }
+
+        int providedId = Integer.parseInt(parametros.getFirst());
+        String body = UrlHelper.readRequestBody(exchange);
+
+        JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+        String name = json.get("name").getAsString();
+        String password = json.get("password").getAsString();
+        String email = json.get("email").getAsString();
+
+        List<AdmResponseDTO> adms = admService.update(providedId, name, email, password);
+
+        sendResponse(200, gson.toJson(adms), exchange, "application/json");
     }
 
     private void handleDelete(HttpExchange exchange) throws IOException {

@@ -16,12 +16,20 @@ public class InMemoryAdmRepository implements IAdmRepository {
     }
 
     public Adm findById(int id) {
-
         return adms.get(id);
     }
 
     public void register(String name, String email, String password) {
         Adm newAdm = new Adm(name, email, password);
         adms.put(newAdm.getId(), newAdm);
+    }
+
+    public void update(int id, String name, String password, String email) {
+
+        Adm foundAdm = this.findById(id);
+
+        foundAdm.setName(name);
+        foundAdm.setEmail(email);
+        foundAdm.setPassword(password);
     }
 }

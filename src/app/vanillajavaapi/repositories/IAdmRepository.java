@@ -7,5 +7,6 @@ import java.util.List;
 public interface IAdmRepository {
     List<Adm> findAll();
     Adm findById(int id);
-     void register(String name, String email, String password);
+    void register(String name, String email, String password);
+    void update(int id, String name, String password, String email);
 }

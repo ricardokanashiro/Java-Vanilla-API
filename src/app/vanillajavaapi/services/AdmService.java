@@ -36,15 +36,12 @@ public class AdmService {
     }
 
     public List<AdmResponseDTO> register(String name, String email, String password) {
-
         admRepository.register(name, email, password);
+        return this.findAll();
+    }
 
-        List<Adm> adms = admRepository.findAll();
-        List<AdmResponseDTO> admsFiltered = mapper.mapList(
-                adms,
-                adm -> new AdmResponseDTO(adm.getId(), adm.getName(), adm.getEmail())
-        );
-
-        return admsFiltered;
+    public List<AdmResponseDTO> update(int id, String name, String email, String password) {
+        this.admRepository.update(id, name, email, password);
+        return this.findAll();
     }
 }
