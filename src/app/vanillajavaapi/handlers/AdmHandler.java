@@ -77,17 +77,25 @@ public class AdmHandler implements HttpHandler {
             return;
         }
 
-        int providedId = Integer.parseInt(parametros.getFirst());
-        String body = UrlHelper.readRequestBody(exchange);
+        try {
+            int providedId = Integer.parseInt(parametros.getFirst());
+            String body = UrlHelper.readRequestBody(exchange);
 
-        JsonObject json = JsonParser.parseString(body).getAsJsonObject();
-        String name = json.get("name").getAsString();
-        String password = json.get("password").getAsString();
-        String email = json.get("email").getAsString();
+            JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+            String name = json.get("name").getAsString();
+            String password = json.get("password").getAsString();
+            String email = json.get("email").getAsString();
 
-        List<AdmResponseDTO> adms = admService.update(providedId, name, email, password);
+            List<AdmResponseDTO> adms = admService.update(providedId, name, email, password);
 
-        sendResponse(200, gson.toJson(adms), exchange, "application/json");
+            sendResponse(200, gson.toJson(adms), exchange, "application/json");
+        }
+        catch (IllegalArgumentException e) {
+            sendResponse(400, e.getMessage(), exchange,"application/json");
+        }
+        catch (Exception e) {
+            sendResponse(500, "Erro interno do servidor", exchange, "application/json");
+        }
     }
 
     private void handleDelete(HttpExchange exchange) throws IOException {
@@ -99,10 +107,18 @@ public class AdmHandler implements HttpHandler {
             return;
         }
 
-        int providedId = Integer.parseInt(parametros.getFirst());
-        List<AdmResponseDTO> adms = this.admService.delete(providedId);
+        try {
+            int providedId = Integer.parseInt(parametros.getFirst());
+            List<AdmResponseDTO> adms = this.admService.delete(providedId);
 
-        sendResponse(200, gson.toJson(adms), exchange, "application/json");
+            sendResponse(200, gson.toJson(adms), exchange, "application/json");
+        }
+        catch (IllegalArgumentException e) {
+            sendResponse(400, e.getMessage(), exchange,"application/json");
+        }
+        catch (Exception e) {
+            sendResponse(500, "Erro interno do servidor", exchange, "application/json");
+        }
     }
 
     private void sendResponse(int statusCode, String message, HttpExchange exchange, String format) throws IOException {
