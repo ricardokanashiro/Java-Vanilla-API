@@ -10,6 +10,7 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -73,7 +74,8 @@ public class AdmHandler implements HttpHandler {
         List<String> parametros = UrlHelper.extrairParametro(exchange);
 
         if(parametros.isEmpty()) {
-            sendResponse(400, "Erro ao atualizar adm: id is missing!", exchange, "application/json");
+            String errorJson = gson.toJson(Map.of("error", "Erro ao atualizar adm: id is missing!"));
+            sendResponse(400, errorJson, exchange, "application/json");
             return;
         }
 
@@ -91,10 +93,12 @@ public class AdmHandler implements HttpHandler {
             sendResponse(200, gson.toJson(adms), exchange, "application/json");
         }
         catch (IllegalArgumentException e) {
-            sendResponse(400, e.getMessage(), exchange,"application/json");
+            String errorJson = gson.toJson(Map.of("error", e.getMessage()));
+            sendResponse(400, errorJson, exchange,"application/json");
         }
         catch (Exception e) {
-            sendResponse(500, "Erro interno do servidor", exchange, "application/json");
+            String errorJson = gson.toJson(Map.of("error", "Erro interno do servidor"));
+            sendResponse(500, errorJson, exchange, "application/json");
         }
     }
 
@@ -103,7 +107,8 @@ public class AdmHandler implements HttpHandler {
         List<String> parametros = UrlHelper.extrairParametro(exchange);
 
         if(parametros.isEmpty()) {
-            sendResponse(400, "Erro ao atualizar adm: id is missing!", exchange, "application/json");
+            String errorJson = gson.toJson(Map.of("error", "Erro ao atualizar adm: id is missing!"));
+            sendResponse(400, errorJson, exchange, "application/json");
             return;
         }
 
@@ -114,10 +119,12 @@ public class AdmHandler implements HttpHandler {
             sendResponse(200, gson.toJson(adms), exchange, "application/json");
         }
         catch (IllegalArgumentException e) {
-            sendResponse(400, e.getMessage(), exchange,"application/json");
+            String errorJson = gson.toJson(Map.of("error", e.getMessage()));
+            sendResponse(400, errorJson, exchange,"application/json");
         }
         catch (Exception e) {
-            sendResponse(500, "Erro interno do servidor", exchange, "application/json");
+            String errorJson = gson.toJson(Map.of("error", "Erro interno do servidor"));
+            sendResponse(500, errorJson, exchange, "application/json");
         }
     }
 

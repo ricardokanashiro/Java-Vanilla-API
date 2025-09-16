@@ -1,0 +1,2 @@
+- Verificações de nome, email e senha parecem não estar funcionando (tentei dar update ou registrar - não lembro - com campo vazio no Insomnia)
+- Fazer sub-rota de buscar adm por ID no GET
