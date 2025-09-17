@@ -6,9 +6,9 @@ public class Task {
 
     private static int incrementerID = 0;
 
-    private int id;
+    private final int id;
     private String title;
-    private Date date;
+    private final Date date;
     private boolean done;
 
     public Task(String title) {
