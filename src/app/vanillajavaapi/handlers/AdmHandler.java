@@ -8,13 +8,10 @@ import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
-
-import app.vanillajavaapi.repositories.IAdmRepository;
 
 public class AdmHandler implements HttpHandler {
 
@@ -52,7 +49,7 @@ public class AdmHandler implements HttpHandler {
         List<String> params = UrlHelper.extrairParametro(exchange);
 
         List<AdmResponseDTO> adms = admService.findAll();
-        sendResponse(200, gson.toJson(adms), exchange, "application/json");
+        UrlHelper.sendResponse(200, gson.toJson(adms), exchange, "application/json");
     }
 
     private void handlePost(HttpExchange exchange) throws IOException {
@@ -66,7 +63,7 @@ public class AdmHandler implements HttpHandler {
 
         List<AdmResponseDTO> adms = admService.register(name, email, password);
 
-        sendResponse(200, gson.toJson(adms), exchange, "application/json");
+        UrlHelper.sendResponse(200, gson.toJson(adms), exchange, "application/json");
     }
 
     private void handlePut(HttpExchange exchange) throws IOException {
@@ -75,7 +72,7 @@ public class AdmHandler implements HttpHandler {
 
         if(parametros.isEmpty()) {
             String errorJson = gson.toJson(Map.of("error", "Erro ao atualizar adm: id is missing!"));
-            sendResponse(400, errorJson, exchange, "application/json");
+            UrlHelper.sendResponse(400, errorJson, exchange, "application/json");
             return;
         }
 
@@ -90,15 +87,15 @@ public class AdmHandler implements HttpHandler {
 
             List<AdmResponseDTO> adms = admService.update(providedId, name, email, password);
 
-            sendResponse(200, gson.toJson(adms), exchange, "application/json");
+            UrlHelper.sendResponse(200, gson.toJson(adms), exchange, "application/json");
         }
         catch (IllegalArgumentException e) {
             String errorJson = gson.toJson(Map.of("error", e.getMessage()));
-            sendResponse(400, errorJson, exchange,"application/json");
+            UrlHelper.sendResponse(400, errorJson, exchange,"application/json");
         }
         catch (Exception e) {
             String errorJson = gson.toJson(Map.of("error", "Erro interno do servidor"));
-            sendResponse(500, errorJson, exchange, "application/json");
+            UrlHelper.sendResponse(500, errorJson, exchange, "application/json");
         }
     }
 
@@ -108,7 +105,7 @@ public class AdmHandler implements HttpHandler {
 
         if(parametros.isEmpty()) {
             String errorJson = gson.toJson(Map.of("error", "Erro ao atualizar adm: id is missing!"));
-            sendResponse(400, errorJson, exchange, "application/json");
+            UrlHelper.sendResponse(400, errorJson, exchange, "application/json");
             return;
         }
 
@@ -116,25 +113,15 @@ public class AdmHandler implements HttpHandler {
             int providedId = Integer.parseInt(parametros.getFirst());
             List<AdmResponseDTO> adms = this.admService.delete(providedId);
 
-            sendResponse(200, gson.toJson(adms), exchange, "application/json");
+            UrlHelper.sendResponse(200, gson.toJson(adms), exchange, "application/json");
         }
         catch (IllegalArgumentException e) {
             String errorJson = gson.toJson(Map.of("error", e.getMessage()));
-            sendResponse(400, errorJson, exchange,"application/json");
+            UrlHelper.sendResponse(400, errorJson, exchange,"application/json");
         }
         catch (Exception e) {
             String errorJson = gson.toJson(Map.of("error", "Erro interno do servidor"));
-            sendResponse(500, errorJson, exchange, "application/json");
-        }
-    }
-
-    private void sendResponse(int statusCode, String message, HttpExchange exchange, String format) throws IOException {
-        byte[] bytes = message.getBytes("UTF-8");
-        exchange.getResponseHeaders().set("Content-Type", format + "; charset=UTF-8");
-        exchange.sendResponseHeaders(statusCode, bytes.length);
-
-        try(OutputStream os = exchange.getResponseBody()) {
-            os.write(bytes);
+            UrlHelper.sendResponse(500, errorJson, exchange, "application/json");
         }
     }
 }
