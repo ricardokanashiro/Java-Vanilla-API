@@ -10,7 +10,6 @@ import java.util.List;
 public class AdmService {
 
     private final IAdmRepository admRepository;
-    private static SimpleMapper mapper = new SimpleMapper();
 
     public AdmService(IAdmRepository admRepository) {
         this.admRepository = admRepository;
@@ -20,7 +19,7 @@ public class AdmService {
 
         List<Adm> adms = admRepository.findAll();
 
-        List<AdmResponseDTO> admsFiltered = mapper.mapList(
+        List<AdmResponseDTO> admsFiltered = SimpleMapper.mapList(
                 adms,
                 adm -> new AdmResponseDTO(adm.getId(), adm.getName(), adm.getEmail())
         );
